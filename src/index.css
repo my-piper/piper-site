@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg-dark: #050505;
+  --color-bg-card: #111111;
+
+  --color-primary: #8439FF;
+  --color-primary-glow: rgba(132, 57, 255, 0.4);
+
+  --color-accent: #7000ff;
+  --color-accent-glow: rgba(112, 0, 255, 0.4);
+
+  --color-text-main: #ffffff;
+  --color-text-muted: #a1a1aa;
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+
+  --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  --image-gradient-brand: linear-gradient(135deg, #8439FF 0%, #0066FF 100%);
+}
+
+/* Global styles */
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-main);
+  font-family: var(--font-sans);
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Custom utilities */
+.text-gradient {
+  background: var(--image-gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@utility section-container {
+  @apply py-12 md:py-24 relative w-full max-w-[1200px] mx-auto px-4 z-10;
+}
+
+@utility glass-card {
+  @apply bg-bg-card/80 backdrop-blur-sm border border-white/10 rounded-2xl transition-all duration-300;
+}
+
+@utility glow-wrapper {
+  @apply absolute -inset-0.5 bg-gradient-to-r rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-500;
+}
+
+@utility icon-container {
+  @apply w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center border border-white/5 transition-all duration-500;
+}
