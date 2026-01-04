@@ -17,6 +17,7 @@ import Company from './pages/Company';
 import GDPR from './pages/GDPR';
 import TermsOfUse from './pages/TermsOfUse';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import CookieConsent from './components/CookieConsent';
 
 // Home Page Component
 const HomePage = () => (
@@ -69,6 +70,7 @@ function App() {
         </Routes>
       </main>
       <Footer />
+      <CookieConsent />
     </div>
   );
 }
