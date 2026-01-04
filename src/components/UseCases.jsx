@@ -8,16 +8,16 @@ const UseCases = () => {
     const { t } = useTranslation();
 
     const pipelines = [
-        { icon: Play, titleKey: "use_cases.cases.video_generation.title", descKey: "use_cases.cases.video_generation.desc", image: episodesImg },
-        { icon: Shirt, titleKey: "use_cases.cases.dress_factory.title", descKey: "use_cases.cases.dress_factory.desc", image: dressFactoryImg },
-        { icon: UserSquare2, titleKey: "use_cases.cases.face_swap.title", descKey: "use_cases.cases.face_swap.desc" },
-        { icon: ShieldAlert, titleKey: "use_cases.cases.violations_detector.title", descKey: "use_cases.cases.violations_detector.desc" },
-        { icon: ImagePlus, titleKey: "use_cases.cases.photo_restore.title", descKey: "use_cases.cases.photo_restore.desc" },
-        { icon: ArrowRightLeft, titleKey: "use_cases.cases.compare_images.title", descKey: "use_cases.cases.compare_images.desc" },
-        { icon: Video, titleKey: "use_cases.cases.compare_videos.title", descKey: "use_cases.cases.compare_videos.desc" },
-        { icon: Eraser, titleKey: "use_cases.cases.object_removal.title", descKey: "use_cases.cases.object_removal.desc" },
-        { icon: Maximize2, titleKey: "use_cases.cases.image_upscaling.title", descKey: "use_cases.cases.image_upscaling.desc" },
-        { icon: BoxSelect, titleKey: "use_cases.cases.background_removal.title", descKey: "use_cases.cases.background_removal.desc" },
+        { icon: Play, title: t("use_cases.cases.video_generation.title", "Video with episodes"), desc: t("use_cases.cases.video_generation.desc", "End-to-end video production from text prompts."), image: episodesImg },
+        { icon: Shirt, title: t("use_cases.cases.dress_factory.title", "Dress factory"), desc: t("use_cases.cases.dress_factory.desc", "Virtual try-on and fashion generation."), image: dressFactoryImg },
+        { icon: UserSquare2, title: t("use_cases.cases.face_swap.title", "Swap face at video"), desc: t("use_cases.cases.face_swap.desc", "High-quality face replacement in video footage.") },
+        { icon: ShieldAlert, title: t("use_cases.cases.violations_detector.title", "Violations detector"), desc: t("use_cases.cases.violations_detector.desc", "Automated content moderation and safety checks.") },
+        { icon: ImagePlus, title: t("use_cases.cases.photo_restore.title", "Restore all photos and animate"), desc: t("use_cases.cases.photo_restore.desc", "Restoration of old photos brought to life.") },
+        { icon: ArrowRightLeft, title: t("use_cases.cases.compare_images.title", "Compare image AI models"), desc: t("use_cases.cases.compare_images.desc", "Side-by-side evaluation of different image generators.") },
+        { icon: Video, title: t("use_cases.cases.compare_videos.title", "Compare video AI models"), desc: t("use_cases.cases.compare_videos.desc", "Benchmark performance of video generation models.") },
+        { icon: Eraser, title: t("use_cases.cases.object_removal.title", "Object Removal"), desc: t("use_cases.cases.object_removal.desc", "Clean up images by removing unwanted objects.") },
+        { icon: Maximize2, title: t("use_cases.cases.image_upscaling.title", "Image Upscaling"), desc: t("use_cases.cases.image_upscaling.desc", "Enhance resolution and detail of low-res images.") },
+        { icon: BoxSelect, title: t("use_cases.cases.background_removal.title", "Background Removal"), desc: t("use_cases.cases.background_removal.desc", "Instantly isolate subjects from their background.") },
     ];
 
     return (
@@ -50,10 +50,10 @@ const UseCases = () => {
                             </div>
                             <div className="flex-1">
                                 <h3 className="text-xl font-bold mb-0 text-white transition-colors shadow-lg" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.3)' }}>
-                                    {t(item.titleKey)}
+                                    {item.title}
                                 </h3>
                                 <p className="text-text-muted leading-relaxed">
-                                    {t(item.descKey)}
+                                    {item.desc}
                                 </p>
                             </div>
                         </div>
