@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Globe, Github, ChevronDown, Menu, X, Boxes, Bot, LayoutPanelLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -9,8 +9,11 @@ const Navbar = () => {
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const location = useLocation();
+    const { lang } = useParams();
+    const currentLang = lang || i18n.language || 'en';
     const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
     const dropdownRef = useRef(null);
 
     const languages = [
@@ -32,23 +35,44 @@ const Navbar = () => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    // Handle scroll for compact navbar
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 20);
+        };
+
+        handleScroll(); // Initial check
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
     const changeLanguage = (langCode) => {
         const currentPath = location.pathname;
-        const currentSearch = new URLSearchParams(location.search);
+        // Split path to replace the first segment (lang)
+        const pathSegments = currentPath.split('/').filter(Boolean);
 
-        // Change language immediately
-        i18n.changeLanguage(langCode);
-
-        // For English (default), remove lang parameter; for others, add it
-        if (langCode === 'en') {
-            currentSearch.delete('lang');
+        // If the first segment is a known language, replace it. Otherwise prepend.
+        if (['en', 'ru'].includes(pathSegments[0])) {
+            pathSegments[0] = langCode;
         } else {
-            currentSearch.set('lang', langCode);
+            pathSegments.unshift(langCode);
         }
 
-        // Navigate to current path with or without language parameter
-        const searchString = currentSearch.toString();
-        navigate(`${currentPath}${searchString ? '?' + searchString : ''}`);
+        let newPath = '/' + pathSegments.join('/');
+
+        // Ensure root language path has trailing slash
+        if (pathSegments.length === 1) {
+            newPath += '/';
+        }
+
+        newPath += location.search;
+
+        // Change language (optional, as the route change will trigger it)
+        i18n.changeLanguage(langCode);
+
+        navigate(newPath);
+
+
 
         // Close dropdown
         setIsLangDropdownOpen(false);
@@ -80,8 +104,8 @@ const Navbar = () => {
         };
 
         // If we're not on the home page, navigate there first
-        if (location.pathname !== '/') {
-            navigate('/');
+        if (location.pathname !== `/${currentLang}/` && location.pathname !== `/${currentLang}`) {
+            navigate(`/${currentLang}/`);
             // Wait for navigation and potential menu closing
             setTimeout(performScroll, 300);
         } else {
@@ -95,7 +119,7 @@ const Navbar = () => {
     };
 
     const handleLogoClick = (e) => {
-        const isHome = location.pathname === '/';
+        const isHome = location.pathname === `/${currentLang}/` || location.pathname === `/${currentLang}`;
         setIsMobileMenuOpen(false);
 
         if (isHome) {
@@ -108,32 +132,32 @@ const Navbar = () => {
     };
 
     return (
-        <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-bg-dark/80 backdrop-blur-xl">
+        <header className={`sticky top-0 z-50 w-full border-b border-white/5 backdrop-blur-xl transition-all duration-300 ${isScrolled ? 'bg-bg-dark/95 shadow-md' : 'bg-bg-dark/80'}`}>
             <nav className="w-full max-w-[1200px] mx-auto px-4 relative">
-                <div className="flex items-center justify-between py-6 w-full">
-                    <Link to="/" onClick={handleLogoClick} className="flex items-center gap-2">
-                        <img src={logo} alt="Piper" className="h-8 w-auto" />
+                <div className={`flex items-center justify-between w-full transition-all duration-300 ${isScrolled ? 'py-3' : 'py-6'}`}>
+                    <Link to={`/${currentLang}/`} onClick={handleLogoClick} className="flex items-center gap-2">
+                        <img src={logo} alt="Piper" className={`w-auto transition-all duration-300 ${isScrolled ? 'h-6' : 'h-8'}`} />
                     </Link>
 
                     <div className="hidden md:flex gap-8 items-center">
-                        <a href="/#models" onClick={(e) => handleSmoothScroll(e, 'models')} className="text-text-muted text-sm hover:text-text-main transition-colors">{t('nav.models', 'Models')}</a>
-                        <a href="/#assistant" onClick={(e) => handleSmoothScroll(e, 'assistant')} className="text-text-muted text-sm hover:text-text-main transition-colors">{t('nav.assistant', 'Assistant')}</a>
+                        <a href={`/${currentLang}/#models`} onClick={(e) => handleSmoothScroll(e, 'models')} className="text-text-muted text-sm hover:text-text-main transition-colors">{t('nav.models', 'Models')}</a>
+                        <a href={`/${currentLang}/#assistant`} onClick={(e) => handleSmoothScroll(e, 'assistant')} className="text-text-muted text-sm hover:text-text-main transition-colors">{t('nav.assistant', 'Assistant')}</a>
                         <a
-                            href="/#opensource"
+                            href={`/${currentLang}/#opensource`}
                             onClick={(e) => handleSmoothScroll(e, 'opensource')}
-                            className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-text-muted hover:text-white hover:bg-white/10 transition-colors"
+                            className={`hidden md:flex items-center gap-2 rounded-full bg-white/5 border border-white/10 font-medium text-text-muted hover:text-white hover:bg-white/10 transition-all duration-300 ${isScrolled ? 'px-2.5 py-1 text-[11px]' : 'px-3 py-1.5 text-xs'}`}
                         >
-                            <Github className="w-4 h-4" />
+                            <Github className={`transition-all duration-300 ${isScrolled ? 'w-3.5 h-3.5' : 'w-4 h-4'}`} />
                             <span>{t('nav.opensource', 'Open source')}</span>
                         </a>
-                        <a href="/#cases" onClick={(e) => handleSmoothScroll(e, 'cases')} className="text-text-muted text-sm hover:text-text-main transition-colors">{t('nav.use_cases', 'Use Cases')}</a>
+                        <a href={`/${currentLang}/#cases`} onClick={(e) => handleSmoothScroll(e, 'cases')} className="text-text-muted text-sm hover:text-text-main transition-colors">{t('nav.use_cases', 'Use Cases')}</a>
                     </div>
 
                     <div className="flex items-center gap-4">
                         <div className="hidden sm:flex">
                             <a
                                 href="https://app.piper.my"
-                                className="inline-flex items-center justify-center font-medium transition-all duration-300 gap-2 relative overflow-hidden z-10 disabled:opacity-50 disabled:pointer-events-none active:scale-95 bg-transparent border border-white/10 text-text-main backdrop-blur-md hover:border-text-main hover:bg-white/5 h-11 px-8 rounded-lg"
+                                className={`inline-flex items-center justify-center font-medium transition-all duration-300 gap-2 relative overflow-hidden z-10 disabled:opacity-50 disabled:pointer-events-none active:scale-95 bg-transparent border border-white/10 text-text-main backdrop-blur-md hover:border-text-main hover:bg-white/5 rounded-lg ${isScrolled ? 'h-9 px-6 text-sm' : 'h-11 px-8 text-base'}`}
                             >
                                 {t('nav.try', 'Try now')}
                             </a>
@@ -142,19 +166,19 @@ const Navbar = () => {
                         <div className="flex items-center gap-2 sm:gap-4">
                             {/* Burger Toggle - Now before Globe */}
                             <button
-                                className="md:hidden text-text-muted hover:text-white p-2 border border-white/10 rounded-lg bg-white/5 transition-all active:scale-95 cursor-pointer"
+                                className={`md:hidden text-text-muted hover:text-white border border-white/10 rounded-lg bg-white/5 transition-all duration-300 active:scale-95 cursor-pointer flex items-center justify-center ${isScrolled ? 'p-1.5' : 'p-2'}`}
                                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                             >
-                                {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                                {isMobileMenuOpen ? <X className={`transition-all duration-300 ${isScrolled ? 'w-4 h-4' : 'w-5 h-5'}`} /> : <Menu className={`transition-all duration-300 ${isScrolled ? 'w-4 h-4' : 'w-5 h-5'}`} />}
                             </button>
 
                             {/* Language Dropdown */}
                             <div className="relative" ref={dropdownRef}>
                                 <button
                                     onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
-                                    className="text-text-muted hover:text-white p-2 border border-white/10 rounded-lg bg-white/5 transition-all active:scale-95 flex items-center justify-center cursor-pointer"
+                                    className={`text-text-muted hover:text-white border border-white/10 rounded-lg bg-white/5 transition-all duration-300 active:scale-95 flex items-center justify-center cursor-pointer ${isScrolled ? 'p-1.5' : 'p-2'}`}
                                 >
-                                    <Globe className="w-5 h-5" />
+                                    <Globe className={`transition-all duration-300 ${isScrolled ? 'w-4 h-4' : 'w-5 h-5'}`} />
                                 </button>
 
                                 {/* Dropdown Menu */}
@@ -188,7 +212,7 @@ const Navbar = () => {
                         >
                             <div className="grid grid-cols-1 gap-2 py-4 px-4">
                                 <a
-                                    href="/#models"
+                                    href={`/${currentLang}/#models`}
                                     onClick={(e) => handleSmoothScroll(e, 'models')}
                                     className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5 hover:border-white/20 transition-all active:scale-[0.98]"
                                 >
@@ -199,7 +223,7 @@ const Navbar = () => {
                                 </a>
 
                                 <a
-                                    href="/#assistant"
+                                    href={`/${currentLang}/#assistant`}
                                     onClick={(e) => handleSmoothScroll(e, 'assistant')}
                                     className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5 hover:border-white/20 transition-all active:scale-[0.98]"
                                 >
@@ -210,7 +234,7 @@ const Navbar = () => {
                                 </a>
 
                                 <a
-                                    href="/#opensource"
+                                    href={`/${currentLang}/#opensource`}
                                     onClick={(e) => handleSmoothScroll(e, 'opensource')}
                                     className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:border-white/20 transition-all active:scale-[0.98]"
                                 >
@@ -223,7 +247,7 @@ const Navbar = () => {
                                 </a>
 
                                 <a
-                                    href="/#cases"
+                                    href={`/${currentLang}/#cases`}
                                     onClick={(e) => handleSmoothScroll(e, 'cases')}
                                     className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5 hover:border-white/20 transition-all active:scale-[0.98]"
                                 >

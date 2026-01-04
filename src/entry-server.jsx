@@ -6,9 +6,10 @@ import './index.css'
 import i18n from './i18n'
 
 export function render(url) {
-    // Parse language from query parameter
+    // Parse language from path
     const urlObj = new URL(url, 'http://localhost');
-    const lang = urlObj.searchParams.get('lang');
+    const pathSegments = urlObj.pathname.split('/').filter(Boolean);
+    const lang = pathSegments[0];
 
     // Set language for SSR
     if (lang && (lang === 'ru' || lang === 'en')) {

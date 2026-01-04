@@ -30,7 +30,14 @@ async function createServer() {
     }
 
     app.use(async (req, res, next) => {
-        const url = req.originalUrl.replace(base, '')
+        let url = req.originalUrl.replace(base, '')
+        if (!url.startsWith('/')) {
+            url = '/' + url
+        }
+
+        if (url === '/' || url === '') {
+            return res.redirect(307, '/en/')
+        }
 
         try {
             let template

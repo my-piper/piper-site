@@ -5,9 +5,9 @@ import App from './App'
 import './index.css'
 import i18n from './i18n'
 
-// Parse language from query parameter
-const params = new URLSearchParams(window.location.search);
-const lang = params.get('lang');
+// Parse language from path
+const pathSegments = window.location.pathname.split('/').filter(Boolean);
+const lang = pathSegments[0];
 
 // Set language before hydration to match SSR
 if (lang && (lang === 'ru' || lang === 'en')) {

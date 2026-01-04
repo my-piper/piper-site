@@ -1,5 +1,7 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useParams, Navigate, Outlet } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import AiAssistant from './components/AiAssistant';
@@ -31,17 +33,39 @@ const HomePage = () => (
   </>
 );
 
+const LanguageWrapper = () => {
+  const { lang } = useParams();
+  const { i18n } = useTranslation();
+
+  useEffect(() => {
+    if (lang && ['en', 'ru'].includes(lang)) {
+      if (i18n.language !== lang) {
+        i18n.changeLanguage(lang);
+      }
+    }
+  }, [lang, i18n]);
+
+  if (!['en', 'ru'].includes(lang)) {
+    return <Navigate to="/en/" replace />;
+  }
+
+  return <Outlet />;
+};
+
 function App() {
   return (
     <div className="app">
       <Navbar />
       <main>
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/company" element={<Company />} />
-          <Route path="/gdpr" element={<GDPR />} />
-          <Route path="/terms-of-use" element={<TermsOfUse />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/:lang" element={<LanguageWrapper />}>
+            <Route index element={<HomePage />} />
+            <Route path="company" element={<Company />} />
+            <Route path="gdpr" element={<GDPR />} />
+            <Route path="terms-of-use" element={<TermsOfUse />} />
+            <Route path="privacy-policy" element={<PrivacyPolicy />} />
+          </Route>
+          <Route path="/" element={<Navigate to="/en/" replace />} />
         </Routes>
       </main>
       <Footer />

@@ -151,7 +151,7 @@ const PrivacyPolicy = () => {
                                         <tbody>
                                             <tr className="border-b border-white/10">
                                                 <td className="p-3 font-semibold bg-white/5">Название организации</td>
-                                                <td className="p-3">ИНДИВИДУАЛЬНЫЙ ПРЕДПРИНИМАТЕЛЬ МЕДВЕДЕВ МИХАИЛ ВЛАДИСЛАВОВИЧ</td>
+                                                <td className="p-3">ИНДИВИДУАЛЬНЫЙ ПРЕДПРИНИМАТЕЛЬ<br />МЕДВЕДЕВ МИХАИЛ ВЛАДИСЛАВОВИЧ</td>
                                             </tr>
                                             <tr className="border-b border-white/10">
                                                 <td className="p-3 font-semibold bg-white/5">ИНН</td>
