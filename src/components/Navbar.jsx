@@ -132,7 +132,7 @@ const Navbar = () => {
     };
 
     return (
-        <header className={`sticky top-0 z-50 w-full border-b border-white/5 backdrop-blur-xl transition-all duration-300 ${isScrolled ? 'bg-bg-dark/95 shadow-md' : 'bg-bg-dark/80'}`}>
+        <header className={`sticky top-0 z-50 w-full border-b transition-all duration-300 ${isScrolled ? 'bg-bg-dark/95 border-white/15 shadow-nav-scrolled' : 'bg-bg-dark/80 border-white/5'} backdrop-blur-xl`}>
             <nav className="w-full max-w-[1200px] mx-auto px-4 relative">
                 <div className={`flex items-center justify-between w-full transition-all duration-300 ${isScrolled ? 'py-3' : 'py-6'}`}>
                     <Link to={`/${currentLang}/`} onClick={handleLogoClick} className="flex items-center gap-2">

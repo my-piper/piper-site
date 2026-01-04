@@ -18,6 +18,8 @@
   --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 
   --image-gradient-brand: linear-gradient(135deg, #8439FF 0%, #0066FF 100%);
+
+  --shadow-nav-scrolled: 0 10px 30px -5px rgba(0, 0, 0, 0.8), 0 8px 10px -6px rgba(0, 0, 0, 0.8);
 }
 
 /* Global styles */
