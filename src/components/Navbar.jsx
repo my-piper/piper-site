@@ -154,7 +154,7 @@ const Navbar = () => {
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <div className="hidden sm:flex">
+                        <div className="hidden lg:flex">
                             <a
                                 href="https://app.piper.my"
                                 className={`inline-flex items-center justify-center font-medium transition-all duration-300 gap-2 relative overflow-hidden z-10 disabled:opacity-50 disabled:pointer-events-none active:scale-95 bg-transparent border border-white/10 text-text-main backdrop-blur-md hover:border-text-main hover:bg-white/5 rounded-lg ${isScrolled ? 'h-9 px-6 text-sm' : 'h-11 px-8 text-base'}`}
