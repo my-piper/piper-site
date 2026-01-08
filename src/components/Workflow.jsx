@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Sparkles, Image as ImageIcon, Video, Film, Type } from 'lucide-react';
+import { useIntersectionObserver } from '../lib/useIntersectionObserver';
 import sd35Image from '../assets/workflow/sd_3_5.webp';
 import lastFrame from '../assets/workflow/last_frame.webp';
 import episode1 from '../assets/workflow/episode1.mp4';
@@ -61,15 +62,29 @@ const ImageNode = ({ icon: Icon, title, url, x, y, w, h, delay, color = "text-pu
 
 const VideoNode = ({ icon: Icon, title, url, x, y, w, h, delay, color = "text-orange-400" }) => {
     const { t } = useTranslation();
+    const [ref, isVisible] = useIntersectionObserver({
+        threshold: 0.1,
+        rootMargin: '50px',
+    });
+
     return (
         <NodeContainer x={x} y={y} w={w} h={h} delay={delay} className="p-2 flex flex-col gap-2">
             <div className="flex items-center gap-2">
                 <Icon className={`w-4 h-4 ${color}`} />
                 <span className="text-xs font-bold text-white">{title}</span>
             </div>
-            <div className="w-full h-full bg-gradient-to-br from-gray-800 to-black rounded border border-white/5 flex items-center justify-center overflow-hidden relative group flex-1">
-                {url ? (
+            <div ref={ref} className="w-full h-full bg-gradient-to-br from-gray-800 to-black rounded border border-white/5 flex items-center justify-center overflow-hidden relative group flex-1">
+                {url && isVisible ? (
                     <video src={url} autoPlay loop muted playsInline className="w-full h-full object-cover" />
+                ) : url ? (
+                    <>
+                        {/* Placeholder while not visible */}
+                        <div className="absolute inset-0 opacity-50 bg-gradient-to-tr from-orange-500/20 to-red-500/20" />
+                        <div className="z-10 text-[10px] text-white/40 font-mono flex items-center gap-1">
+                            <Video className="w-4 h-4" />
+                            {t('workflow.nodes.mock.loading', 'Loading...')}
+                        </div>
+                    </>
                 ) : (
                     <>
                         {/* Mock Content */}

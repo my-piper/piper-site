@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Cpu, Layers, Sparkles, Video as VideoIcon, Palette, Music, Image as ImageIcon, Box, Bot, Globe, Zap, Layout, Type } from 'lucide-react';
+import { useIntersectionObserver } from '../lib/useIntersectionObserver';
 import openai from '../assets/models/openai.webp';
 import luma from '../assets/models/luma-ai.webm';
 import wan from '../assets/models/wan.webm';
@@ -12,6 +13,71 @@ import claude from '../assets/models/claude.webp';
 import suno from '../assets/models/suno.webp';
 import rodin from '../assets/models/rodin.webm';
 import kling from '../assets/models/kling.webm';
+
+const ModelCard = ({ producer, index }) => {
+    const [ref, isVisible] = useIntersectionObserver({
+        threshold: 0.1,
+        rootMargin: '100px',
+    });
+
+    return (
+        <div
+            key={index}
+            className="group relative bg-bg-card border border-white/10 rounded-xl shadow-2xl backdrop-blur-md p-3 flex flex-col gap-3 min-h-[200px] hover:scale-[1.02] hover:border-white/20 transition-all duration-300"
+        >
+            {/* Header */}
+            <div className="flex items-center justify-between mb-1 relative z-10">
+                <span className="text-xs font-bold text-white uppercase tracking-wider">{producer.name}</span>
+                <div className="flex items-center gap-1.5">
+                    {producer.icons.map((Icon, i) => (
+                        <div key={i} className={`p-1.5 rounded-md bg-white/5 ${producer.color || 'text-primary'}`}>
+                            <Icon className="w-4 h-4" />
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Media/Content Box */}
+            <div ref={ref} className="relative flex-1 w-full bg-black/40 rounded-lg border border-white/5 overflow-hidden group/media">
+                {producer.video && isVisible && (
+                    <video
+                        src={producer.video}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover/media:opacity-80 transition-opacity duration-500"
+                    />
+                )}
+                {producer.image && (
+                    <img
+                        src={producer.image}
+                        alt={producer.name}
+                        className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover/media:opacity-80 transition-opacity duration-500"
+                    />
+                )}
+
+                {/* Overlay for models */}
+                <div className="relative z-10 p-3 h-full flex flex-col justify-between">
+                    <p className="text-[10px] text-text-muted leading-tight line-clamp-2 mb-2">
+                        {producer.desc}
+                    </p>
+
+                    <div className="flex flex-wrap gap-1.5 mt-auto">
+                        {producer.models.map((model, idx) => (
+                            <span
+                                key={idx}
+                                className="text-[9px] font-medium text-white/70 bg-black/60 px-2 py-0.5 rounded border border-white/10 backdrop-blur-md"
+                            >
+                                {model}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 const AllModels = () => {
     const { t } = useTranslation();
@@ -132,61 +198,7 @@ const AllModels = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-[1200px] mx-auto">
                 {producers.map((producer, index) => (
-                    <div
-                        key={index}
-                        className="group relative bg-bg-card border border-white/10 rounded-xl shadow-2xl backdrop-blur-md p-3 flex flex-col gap-3 min-h-[200px] hover:scale-[1.02] hover:border-white/20 transition-all duration-300"
-                    >
-                        {/* Header */}
-                        <div className="flex items-center justify-between mb-1 relative z-10">
-                            <span className="text-xs font-bold text-white uppercase tracking-wider">{producer.name}</span>
-                            <div className="flex items-center gap-1.5">
-                                {producer.icons.map((Icon, i) => (
-                                    <div key={i} className={`p-1.5 rounded-md bg-white/5 ${producer.color || 'text-primary'}`}>
-                                        <Icon className="w-4 h-4" />
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Media/Content Box */}
-                        <div className="relative flex-1 w-full bg-black/40 rounded-lg border border-white/5 overflow-hidden group/media">
-                            {producer.video && (
-                                <video
-                                    src={producer.video}
-                                    autoPlay
-                                    muted
-                                    loop
-                                    playsInline
-                                    className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover/media:opacity-80 transition-opacity duration-500"
-                                />
-                            )}
-                            {producer.image && (
-                                <img
-                                    src={producer.image}
-                                    alt={producer.name}
-                                    className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover/media:opacity-80 transition-opacity duration-500"
-                                />
-                            )}
-
-                            {/* Overlay for models */}
-                            <div className="relative z-10 p-3 h-full flex flex-col justify-between">
-                                <p className="text-[10px] text-text-muted leading-tight line-clamp-2 mb-2">
-                                    {producer.desc}
-                                </p>
-
-                                <div className="flex flex-wrap gap-1.5 mt-auto">
-                                    {producer.models.map((model, idx) => (
-                                        <span
-                                            key={idx}
-                                            className="text-[9px] font-medium text-white/70 bg-black/60 px-2 py-0.5 rounded border border-white/10 backdrop-blur-md"
-                                        >
-                                            {model}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <ModelCard key={index} producer={producer} index={index} />
                 ))}
             </div>
 
