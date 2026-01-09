@@ -137,6 +137,7 @@ const Navbar = () => {
                 <div className={`flex items-center justify-between w-full transition-all duration-300 ${isScrolled ? 'py-3' : 'py-6'}`}>
                     <Link to={`/${currentLang}/`} onClick={handleLogoClick} className="flex items-center gap-2">
                         <img src={logo} alt="Piper" className={`w-auto transition-all duration-300 ${isScrolled ? 'h-6' : 'h-8'}`} />
+                        <span className="text-[9px] font-bold uppercase tracking-wider bg-primary/20 text-primary px-1 py-[1px] rounded border border-primary/20 relative -top-1.5">beta</span>
                     </Link>
 
                     <div className="hidden md:flex gap-8 items-center">

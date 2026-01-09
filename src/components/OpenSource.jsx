@@ -87,14 +87,24 @@ const OpenSource = () => {
                     </p>
 
                     <div className="flex flex-wrap gap-4 mb-10">
-                        <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/10">
+                        <a
+                            href="https://github.com/my-piper/piper"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-colors cursor-pointer"
+                        >
                             <Key className="w-4 h-4 text-text-muted" />
                             <span className="text-sm">{t('opensource.badges.opensource', 'Open Source')}</span>
-                        </div>
-                        <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/10">
+                        </a>
+                        <a
+                            href="https://github.com/my-piper/piper-swarm"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-colors cursor-pointer"
+                        >
                             <Server className="w-4 h-4 text-text-muted" />
                             <span className="text-sm">{t('opensource.badges.docker', 'Docker Deploy')}</span>
-                        </div>
+                        </a>
                     </div>
                 </div>
 

@@ -7,6 +7,13 @@ const Company = () => {
 
     return (
         <div className="min-h-screen pt-20">
+            {/* Page Title */}
+            <section className="section-container pb-0 text-center">
+                <h1 className="text-4xl md:text-6xl font-bold text-white">
+                    {t('company.title', 'About Us')}
+                </h1>
+            </section>
+
             {/* Mission Section */}
             <section className="section-container">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
